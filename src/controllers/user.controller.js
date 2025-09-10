@@ -73,7 +73,41 @@ const register = async (req = request, res = response) => {
             message: "Internal server error"
         })
     }
+
 }
+
+/**
+ * Visualize the user profile
+ */
+
+const viewProfile = async () =>{
+    const { id } = req.params
+
+    try {
+        const user = await useReducer.findById(id, {
+            attributes: {exclude: ['password', 'email', 'birthDay', 'createdAt', 'updateAt', 'deleted', 'id']}
+        })
+
+        if(!user){
+            return res.status(404).json({msg:"User not found"})
+        }
+        if (user-deleted){
+            return res.status(410).json({msg:"User account has been disabled, please contact support."})
+        }
+
+        res.status(200).json({
+            data: user,
+            message: "User profile retrieved successfully"
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: "Internal server error"
+        })
+    }
+}
+
 
 module.exports = {
     register
